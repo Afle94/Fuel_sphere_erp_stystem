@@ -1,0 +1,1047 @@
+PROCEDURE WORD
+PARA AMTTOTAL,DUMY
+
+*------------ Change Amount to Word in this portion (Starts) -----------*
+
+A1='One'
+A2='Two'
+A3='Three'
+A4='Four'
+A5='Five'
+A6='Six'
+A7='Seven'
+A8='Eight'
+A9='Nine'
+A10='Ten'
+A11='Eleven'
+A12='Twelve'
+A13='Thirteen'
+A14='Fourteen'
+A15='Fifteen'
+A16='Sixteen'
+A17='Seventeen'
+A18='Eighteen'
+A19='Nineteen'
+
+B2='Twenty'
+B3='Thirty'
+B4='Fourty'
+B5='Fifty'
+B6='Sixty'
+B7='Seventy'
+B8='Eighty'
+B9='Ninety'
+
+SAMOUNT=STR(INT(AMTTOTAL))
+NAMOUNT=ALLTRIM(SAMOUNT)
+SLENGTH=LEN(ALLTRIM(NAMOUNT))
+
+
+DO WHILE .T.
+DO CASE
+
+   CASE SLENGTH=7
+      
+   IF VAL(SUBSTR(NAMOUNT,1,2))<20 && AND VAL(SUBSTR(NAMOUNT,1,2))>10
+      X=SUBSTR(NAMOUNT,1,2)
+      DUMY=DUMY+' '+A&X
+      SLENGTH=SLENGTH-2
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+      dumy=dumy+' '+'Lakh'
+   ELSE
+      X=LEFT(NAMOUNT,1)
+      DUMY=DUMY+' '+B&X
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+   ENDIF
+
+   CASE SLENGTH=6
+
+   IF SUBSTR(NAMOUNT,1,1)<>'0'
+      X=LEFT(NAMOUNT,1)
+      DUMY=DUMY+' '+A&X
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+      
+   ELSE
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+
+   ENDIF
+
+
+   DUMY=DUMY+' Lakh'     
+   
+   CASE SLENGTH=5
+
+   OK='N'
+   
+   IF VAL(SUBSTR(NAMOUNT,1,2))<20 && AND VAL(SUBSTR(NAMOUNT,1,2))>10
+ 
+          IF SUBSTR(NAMOUNT,1,1)<>'0'
+             X=LEFT(NAMOUNT,2)
+             DUMY=DUMY+' '+A&X
+             SLENGTH=SLENGTH-2
+             NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+             OK='Y'
+             dumy=dumy+' '+'Thousand'
+             
+          ELSE
+             SLENGTH=SLENGTH-1
+             NAMOUNT=RIGHT(NAMOUNT,SLENGTH)    
+          ENDIF
+          
+   ELSE
+ 
+            IF SUBSTR(NAMOUNT,1,1)<>'0'
+               X=LEFT(NAMOUNT,1)
+               *X=LEFT(NAMOUNT,2)
+               DUMY=DUMY+' '+b&X
+               SLENGTH=SLENGTH-1
+               NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+               OK='Y'
+               
+               ELSE
+               SLENGTH=SLENGTH-1
+               NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+            ENDIF
+      
+*      SLENGTH=SLENGTH-1
+*      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+      
+   ENDIF
+
+   CASE SLENGTH=4
+      
+   IF SUBSTR(NAMOUNT,1,1)<>'0'
+      X=LEFT(NAMOUNT,1)
+      DUMY=DUMY+' '+A&X
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+      OK='Y'
+   ELSE
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+   ENDIF
+
+      IF OK='Y'
+      DUMY=DUMY+' Thousand'      
+      ENDIF
+
+   CASE SLENGTH=3
+   
+      IF SUBSTR(NAMOUNT,1,1)<>'0'
+      X=LEFT(NAMOUNT,1)
+      DUMY=DUMY+' '+A&X
+      DUMY=DUMY+' Hundred'
+      ENDIF
+      
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+     
+   CASE SLENGTH=2
+
+       IF VAL(SUBSTR(NAMOUNT,1,2))<20
+          IF SUBSTR(NAMOUNT,1,1)<>'0'
+             X=LEFT(NAMOUNT,2)
+             DUMY=DUMY+' '+A&X
+             SLENGTH=SLENGTH-2
+             NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+          ELSE
+             SLENGTH=SLENGTH-1
+             NAMOUNT=RIGHT(NAMOUNT,SLENGTH)    
+          ENDIF
+
+       ELSE
+            IF SUBSTR(NAMOUNT,1,1)<>'0'
+               X=LEFT(NAMOUNT,1)
+               DUMY=DUMY+' '+B&X
+               SLENGTH=SLENGTH-1
+               NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+            ENDIF
+       ENDIF
+
+   CASE SLENGTH=1
+      
+      IF SUBSTR(NAMOUNT,1,1)<>'0'
+      X=LEFT(NAMOUNT,1)
+      DUMY=DUMY+' '+A&X
+      ENDIF
+      
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+      
+   OTHERWISE
+      EXIT
+      
+ENDCASE
+
+ENDDO
+
+*----- Paise Calculation Starts -----*
+XAMOUNT=STR(AMTTOTAL-INT(AMTTOTAL),3,2)
+SAMOUNT=RIGHT(XAMOUNT,2)
+NAMOUNT=SAMOUNT
+SLENGTH=LEN(ALLTRIM(NAMOUNT))
+
+IF NOT EMPTY(VAL(NAMOUNT))
+DUMY=DUMY+' & Paise'
+PAISE='Y'
+ELSE
+PAISE='N'
+ENDIF
+
+DO WHILE .T.
+DO CASE
+
+   CASE SLENGTH=7
+      
+   IF VAL(SUBSTR(NAMOUNT,1,2))<20 && AND VAL(SUBSTR(NAMOUNT,1,2))>10
+      X=SUBSTR(NAMOUNT,1,2)
+      DUMY=DUMY+' '+A&X
+      SLENGTH=SLENGTH-2
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+      dumy=dumy+' '+'Lakh'
+   ELSE
+      X=LEFT(NAMOUNT,1)
+      DUMY=DUMY+' '+B&X
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+   ENDIF
+
+   CASE SLENGTH=6
+
+   IF SUBSTR(NAMOUNT,1,1)<>'0'
+      X=LEFT(NAMOUNT,1)
+      DUMY=DUMY+' '+A&X
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+      
+   ELSE
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+
+   ENDIF
+
+
+   DUMY=DUMY+' Lakh'     
+   
+   CASE SLENGTH=5
+
+   OK='N'
+   
+   IF VAL(SUBSTR(NAMOUNT,1,2))<20 && AND VAL(SUBSTR(NAMOUNT,1,2))>10
+ 
+          IF SUBSTR(NAMOUNT,1,1)<>'0'
+             X=LEFT(NAMOUNT,2)
+             DUMY=DUMY+' '+A&X
+             SLENGTH=SLENGTH-2
+             NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+             OK='Y'
+             dumy=dumy+' '+'Thousand'
+             
+          ELSE
+             SLENGTH=SLENGTH-1
+             NAMOUNT=RIGHT(NAMOUNT,SLENGTH)    
+          ENDIF
+          
+   ELSE
+ 
+            IF SUBSTR(NAMOUNT,1,1)<>'0'
+               X=LEFT(NAMOUNT,1)
+               *X=LEFT(NAMOUNT,2)
+               DUMY=DUMY+' '+b&X
+               SLENGTH=SLENGTH-1
+               NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+               OK='Y'
+               
+               ELSE
+               SLENGTH=SLENGTH-1
+               NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+            ENDIF
+      
+*      SLENGTH=SLENGTH-1
+*      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+      
+   ENDIF
+
+   CASE SLENGTH=4
+      
+   IF SUBSTR(NAMOUNT,1,1)<>'0'
+      X=LEFT(NAMOUNT,1)
+      DUMY=DUMY+' '+A&X
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+      OK='Y'
+   ELSE
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+   ENDIF
+
+      IF OK='Y'
+      DUMY=DUMY+' Thousand'      
+      ENDIF
+
+   CASE SLENGTH=3
+   
+      IF SUBSTR(NAMOUNT,1,1)<>'0'
+      X=LEFT(NAMOUNT,1)
+      DUMY=DUMY+' '+A&X
+      DUMY=DUMY+' Hundred'
+      ENDIF
+      
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+     
+   CASE SLENGTH=2
+
+       IF VAL(SUBSTR(NAMOUNT,1,2))<20
+          IF SUBSTR(NAMOUNT,1,1)<>'0'
+             X=LEFT(NAMOUNT,2)
+             DUMY=DUMY+' '+A&X
+             SLENGTH=SLENGTH-2
+             NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+          ELSE
+             SLENGTH=SLENGTH-1
+             NAMOUNT=RIGHT(NAMOUNT,SLENGTH)    
+          ENDIF
+
+       ELSE
+            IF SUBSTR(NAMOUNT,1,1)<>'0'
+               X=LEFT(NAMOUNT,1)
+               DUMY=DUMY+' '+B&X
+               SLENGTH=SLENGTH-1
+               NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+            ENDIF
+       ENDIF
+
+   CASE SLENGTH=1
+      
+      IF SUBSTR(NAMOUNT,1,1)<>'0'
+      X=LEFT(NAMOUNT,1)
+      DUMY=DUMY+' '+A&X
+      ENDIF
+      
+      SLENGTH=SLENGTH-1
+      NAMOUNT=RIGHT(NAMOUNT,SLENGTH)
+      
+   OTHERWISE
+      EXIT
+      
+ENDCASE
+
+ENDDO
+
+IF PAISE='Y'
+DUMY=DUMY+' Only'
+ENDIF
+
+IF ALLTRIM(UPPER(RIGHT(DUMY,4)))<>'ONLY'
+DUMY=DUMY+' Only'
+ENDIF && ALLTRIM(UPPER(RIGHT(DUMY,4)))<>'ONLY'
+
+*------------ Change Amount to Word in this portion (Finish) -----------*
+*-------------------------------------------------------------------------*
+PROCEDURE SHOWCALCTAKE
+
+*ON KEY LABEL ALT+C DO GETCALC IN MESSAGES
+
+IF NOT WEXIST("caltake") ;
+	OR UPPER(WTITLE("CALTAKE")) == "CALTAKE.PJX" ;
+	OR UPPER(WTITLE("CALTAKE")) == "CALTAKE.SCX" ;
+	OR UPPER(WTITLE("CALTAKE")) == "CALTAKE.MNX" ;
+	OR UPPER(WTITLE("CALTAKE")) == "CALTAKE.PRG" ;
+	OR UPPER(WTITLE("CALTAKE")) == "CALTAKE.FRX" ;
+	OR UPPER(WTITLE("CALTAKE")) == "CALTAKE.QPR"
+	DEFINE WINDOW caltake ;
+		AT  0.000, 0.000  ;
+		SIZE 8.700,61.286 ;
+		FONT "Times New Roman", 12 ;
+		STYLE "B" ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,0,255,255)
+	MOVE WINDOW caltake CENTER
+ENDIF
+
+IF WVISIBLE("caltake")
+	ACTIVATE WINDOW caltake SAME
+ELSE
+	ACTIVATE WINDOW caltake NOSHOW
+ENDIF
+
+@ 2.050,14.714 SAY "Processing Is In Progress" ;
+	FONT "Times New Roman", 16 ;
+	STYLE "BT" ;
+	COLOR RGB(128,0,128,,,,)
+
+@ 4.450,23.000 SAY "Please Wait" ;
+	FONT "Times New Roman", 16 ;
+	STYLE "BT" ;
+	COLOR RGB(128,0,128,,,,)
+
+IF NOT WVISIBLE("caltake")
+	ACTIVATE WINDOW caltake
+ENDIF
+
+
+*---------------------------------------------------------------------------*
+PROCEDURE HIDECALCTAKE
+
+*ON KEY LABEL ALT+C DO GETCALC IN MESSAGES
+
+RELEASE WINDOW caltake
+
+*---------------------------------------------------------------------------*
+PROCEDURE NILSTOCK
+
+IF NOT WEXIST("NILSTOCK") ;
+	OR UPPER(WTITLE("NILSTOCK")) == "NILSTOCK.PJX" ;
+	OR UPPER(WTITLE("NILSTOCK")) == "NILSTOCK.SCX" ;
+	OR UPPER(WTITLE("NILSTOCK")) == "NILSTOCK.MNX" ;
+	OR UPPER(WTITLE("NILSTOCK")) == "NILSTOCK.PRG" ;
+	OR UPPER(WTITLE("NILSTOCK")) == "NILSTOCK.FRX" ;
+	OR UPPER(WTITLE("NILSTOCK")) == "NILSTOCK.QPR"
+	DEFINE WINDOW NILSTOCK ;
+		AT  0.000, 0.000  ;
+		SIZE 11.250,59.125 ;
+		FONT "MS Sans Serif", 10 ;
+		STYLE "B" ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,0,255,0)
+	MOVE WINDOW NILSTOCK CENTER
+ENDIF
+
+IF WVISIBLE("NILSTOCK")
+	ACTIVATE WINDOW NILSTOCK SAME IN WINDOW &WINNAME
+ELSE
+	ACTIVATE WINDOW NILSTOCK NOSHOW IN WINDOW &WINNAME
+ENDIF
+
+*@ 0.313,17.875 SAY "Invalid Specification" ;
+	FONT "MS Sans Serif", 14 ;
+	STYLE "BT" ;
+	COLOR RGB(0,0,255,,,,)
+		
+@ 2.750,12.625 SAY "Want To See Nil Stock Also ? (Y/N)" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT" ;
+	COLOR RGB(128,0,0,,,,)
+@ 5.000,14.250 SAY "Specify Y For Yes Or N For No" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT" ;
+	COLOR RGB(128,0,0,,,,)
+
+@ 8.188,29.000 GET ANS ;
+	SIZE 1.000,1.000 ;
+	FONT "MS Sans Serif", 10 ;
+	STYLE "B" ;
+	PICTURE "Y"
+
+IF NOT WVISIBLE("NILSTOCK")
+	ACTIVATE WINDOW NILSTOCK IN WINDOW &WINNAME
+ENDIF
+
+READ
+
+RELEASE WINDOW NILSTOCK
+*------------------------------------------------------------------------------------------------------------------------------------------------------*
+PROCEDURE WITHINRANGE
+SET CURSOR OFF
+
+IF NOT WEXIST("_0ap0262z2")
+	DEFINE WINDOW _0ap0262z2 ;
+		AT  0.000, 0.000  ;
+		SIZE 9.438,40.625 ;
+		FONT "MS Sans Serif", 10 ;
+		STYLE "B" ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,192,192,192)
+	MOVE WINDOW _0ap0262z2 CENTER
+ENDIF
+
+IF WVISIBLE("_0ap0262z2")
+	ACTIVATE WINDOW _0ap0262z2 SAME
+ELSE
+	ACTIVATE WINDOW _0ap0262z2 NOSHOW
+ENDIF
+@ 2.000,8.250 SAY "INVALID DATE RANGE" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+@ 5.750,10.750 SAY "Enter Correct Date" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+IF NOT WVISIBLE("_0ap0262z2")
+	ACTIVATE WINDOW _0ap0262z2
+ENDIF
+
+READ CYCLE
+
+RELEASE WINDOW _0ap0262z2
+
+SET CURSOR ON
+*--------------------------------------------------------------------------------------------*
+PROCEDURE MUNDATORYINPUT
+
+IF NOT WEXIST("MUNDATORY") ;
+	OR UPPER(WTITLE("MUNDATORY")) == "MUNDATORY.PJX" ;
+	OR UPPER(WTITLE("MUNDATORY")) == "MUNDATORY.SCX" ;
+	OR UPPER(WTITLE("MUNDATORY")) == "MUNDATORY.MNX" ;
+	OR UPPER(WTITLE("MUNDATORY")) == "MUNDATORY.PRG" ;
+	OR UPPER(WTITLE("MUNDATORY")) == "MUNDATORY.FRX" ;
+	OR UPPER(WTITLE("MUNDATORY")) == "MUNDATORY.QPR"
+	DEFINE WINDOW MUNDATORY ;
+		AT  0.000, 0.000  ;
+		SIZE 6.688,41.750 ;
+		FONT "MS Sans Serif", 10 ;
+		STYLE "B" ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,192,192,192)
+	MOVE WINDOW MUNDATORY CENTER
+ENDIF
+
+IF WVISIBLE("MUNDATORY")
+	ACTIVATE WINDOW MUNDATORY SAME IN WINDOW &WINNAME
+ELSE
+	ACTIVATE WINDOW MUNDATORY NOSHOW IN WINDOW &WINNAME
+ENDIF
+
+@ 0.938,11.000 SAY "MUNDATORY INPUT" ;
+	FONT "MS Sans Serif", 10 ;
+	STYLE "BT" ;
+	COLOR RGB(255,0,0,,,,)
+@ 3.188,6.875 SAY "YOU CAN NOT LEAVE BLANK" ;
+	FONT "MS Sans Serif", 10 ;
+	STYLE "BT"
+
+IF NOT WVISIBLE("MUNDATORY")
+	ACTIVATE WINDOW MUNDATORY IN WINDOW &WINNAME
+ENDIF
+
+READ CYCLE
+
+RELEASE WINDOW MUNDATORY
+*--------------------------------------------------------------------------------------------*
+PROCEDURE WAITONLY
+
+SET CURSOR OFF
+
+IF NOT WEXIST("WAITONLY") ;
+	OR UPPER(WTITLE("WAITONLY")) == "WAITONLY.PJX" ;
+	OR UPPER(WTITLE("WAITONLY")) == "WAITONLY.SCX" ;
+	OR UPPER(WTITLE("WAITONLY")) == "WAITONLY.MNX" ;
+	OR UPPER(WTITLE("WAITONLY")) == "WAITONLY.PRG" ;
+	OR UPPER(WTITLE("WAITONLY")) == "WAITONLY.FRX" ;
+	OR UPPER(WTITLE("WAITONLY")) == "WAITONLY.QPR"
+	DEFINE WINDOW WAITONLY ;
+		AT  0.000, 0.000  ;
+		SIZE 6.688,41.750 ;
+		FONT "MS Sans Serif", 10 ;
+		STYLE "B" ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,192,192,192)
+	MOVE WINDOW WAITONLY CENTER
+ENDIF
+
+IF WVISIBLE("WAITONLY")
+	ACTIVATE WINDOW WAITONLY SAME IN WINDOW &WINNAME
+ELSE
+	ACTIVATE WINDOW WAITONLY NOSHOW IN WINDOW &WINNAME
+ENDIF
+
+@ 0.938,12.000 SAY "*   *   WAIT   *   * " ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT" ;
+	COLOR RGB(255,0,0,,,,)
+
+@ 4.188,8.875 SAY "Press Any Key To Continue" ;
+	FONT "MS Sans Serif", 10 ;
+	STYLE "BT"
+
+IF NOT WVISIBLE("WAITONLY")
+	ACTIVATE WINDOW WAITONLY IN WINDOW &WINNAME
+ENDIF
+
+READ CYCLE
+
+RELEASE WINDOW WAITONLY
+
+SET CURSOR ON
+
+*--------------------------------------------------------------------------------------------*
+PROCEDURE STARTSAVE
+
+IF NOT WEXIST("_0ap02mnpi")
+	DEFINE WINDOW _0ap02mnpi ;
+		AT  0.000, 0.000  ;
+		SIZE 8.250,59.250 ;
+		FONT "MS Sans Serif", 10 ;
+		STYLE "B" ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,192,192,192)
+	MOVE WINDOW _0ap02mnpi CENTER
+ENDIF
+
+IF WVISIBLE("_0ap02mnpi")
+	ACTIVATE WINDOW _0ap02mnpi SAME
+ELSE
+	ACTIVATE WINDOW _0ap02mnpi NOSHOW
+ENDIF
+
+@ 2.000,17.250 SAY "Saving The Information !" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT" ;
+	COLOR RGB(128,0,0,,,,)
+@ 4.375,23.625 SAY "Please Wait" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT" ;
+	COLOR RGB(128,0,0,,,,)
+
+IF NOT WVISIBLE("_0ap02mnpi")
+	ACTIVATE WINDOW _0ap02mnpi
+ENDIF
+
+*-----------------------------------------------------------------------------------------*
+PROCEDURE ENDSAVE
+
+RELEASE WINDOW _0ap02mnpi
+*-----------------------------------------------------------------------------------------*
+PROCEDURE STARTDELETE
+
+IF NOT WEXIST("_0ap02mnpi")
+	DEFINE WINDOW _0ap02mnpi ;
+		AT  0.000, 0.000  ;
+		SIZE 8.250,59.250 ;
+		FONT "MS Sans Serif", 10 ;
+		STYLE "B" ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,192,192,192)
+	MOVE WINDOW _0ap02mnpi CENTER
+ENDIF
+
+IF WVISIBLE("_0ap02mnpi")
+	ACTIVATE WINDOW _0ap02mnpi SAME
+ELSE
+	ACTIVATE WINDOW _0ap02mnpi NOSHOW
+ENDIF
+
+@ 2.000,17.250 SAY "Deleting The Information !" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT" ;
+	COLOR RGB(128,0,0,,,,)
+@ 4.375,23.625 SAY "Please Wait" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT" ;
+	COLOR RGB(128,0,0,,,,)
+
+IF NOT WVISIBLE("_0ap02mnpi")
+	ACTIVATE WINDOW _0ap02mnpi
+ENDIF
+
+*-----------------------------------------------------------------------------------------*
+PROCEDURE ENDDELETE
+
+RELEASE WINDOW _0ap02mnpi
+*-----------------------------------------------------------------------------------------*
+PROCEDURE STARTUPD
+
+IF NOT WEXIST("_0ap02mnpi")
+	DEFINE WINDOW _0ap02mnpi ;
+		AT  0.000, 0.000  ;
+		SIZE 8.250,59.250 ;
+		FONT "MS Sans Serif", 10 ;
+		STYLE "B" ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,192,192,192)
+	MOVE WINDOW _0ap02mnpi CENTER
+ENDIF
+
+IF WVISIBLE("_0ap02mnpi")
+	ACTIVATE WINDOW _0ap02mnpi SAME
+ELSE
+	ACTIVATE WINDOW _0ap02mnpi NOSHOW
+ENDIF
+
+@ 2.000,17.250 SAY "Update The Information !" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT" ;
+	COLOR RGB(128,0,0,,,,)
+@ 4.375,23.625 SAY "Please Wait" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT" ;
+	COLOR RGB(128,0,0,,,,)
+
+IF NOT WVISIBLE("_0ap02mnpi")
+	ACTIVATE WINDOW _0ap02mnpi
+ENDIF
+
+*-----------------------------------------------------------------------------------------*
+PROCEDURE ENDUPD
+
+RELEASE WINDOW _0ap02mnpi
+*-----------------------------------------------------------------------------------------*
+PROCEDURE VNOTEXISTS
+
+IF NOT WEXIST("VNOTEXISTS") ;
+	OR UPPER(WTITLE("VNOTEXISTS")) == "VNOTEXISTS.PJX" ;
+	OR UPPER(WTITLE("VNOTEXISTS")) == "VNOTEXISTS.SCX" ;
+	OR UPPER(WTITLE("VNOTEXISTS")) == "VNOTEXISTS.MNX" ;
+	OR UPPER(WTITLE("VNOTEXISTS")) == "VNOTEXISTS.PRG" ;
+	OR UPPER(WTITLE("VNOTEXISTS")) == "VNOTEXISTS.FRX" ;
+	OR UPPER(WTITLE("VNOTEXISTS")) == "VNOTEXISTS.QPR"
+	DEFINE WINDOW VNOTEXISTS ;
+		AT  0.000, 0.000  ;
+		SIZE 6.688,41.750 ;
+		FONT "MS Sans Serif", 10 ;
+		STYLE "B" ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,192,192,192)
+	MOVE WINDOW VNOTEXISTS CENTER
+ENDIF
+
+IF WVISIBLE("VNOTEXISTS")
+	ACTIVATE WINDOW VNOTEXISTS SAME IN WINDOW &WINNAME
+ELSE
+	ACTIVATE WINDOW VNOTEXISTS NOSHOW IN WINDOW &WINNAME
+ENDIF
+
+@ 0.938,11.000 SAY "INVALID REF.NO." ;
+	FONT "MS Sans Serif", 10 ;
+	STYLE "BT" ;
+	COLOR RGB(255,0,0,,,,)
+@ 3.188,14.875 SAY "TRY AGAIN" ;
+	FONT "MS Sans Serif", 10 ;
+	STYLE "BT"
+
+IF NOT WVISIBLE("VNOTEXISTS")
+	ACTIVATE WINDOW VNOTEXISTS IN WINDOW &WINNAME
+ENDIF
+
+READ CYCLE
+
+RELEASE WINDOW VNOTEXISTS
+*--------------------------------------------------------------------------------------------*
+PROCEDURE WITHINRANGE
+SET CURSOR OFF
+
+IF NOT WEXIST("_0ap0262z2")
+	DEFINE WINDOW _0ap0262z2 ;
+		AT  0.000, 0.000  ;
+		SIZE 9.438,40.625 ;
+		FONT "MS Sans Serif", 10 ;
+		STYLE "B" ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,192,192,192)
+	MOVE WINDOW _0ap0262z2 CENTER
+ENDIF
+
+IF WVISIBLE("_0ap0262z2")
+	ACTIVATE WINDOW _0ap0262z2 SAME
+ELSE
+	ACTIVATE WINDOW _0ap0262z2 NOSHOW
+ENDIF
+@ 2.000,8.250 SAY "INVALID DATE RANGE" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+@ 5.750,10.750 SAY "Enter Correct Date" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+IF NOT WVISIBLE("_0ap0262z2")
+	ACTIVATE WINDOW _0ap0262z2
+ENDIF
+
+READ CYCLE
+
+RELEASE WINDOW _0ap0262z2
+
+SET CURSOR ON
+*--------------------------------------------------------------------------------------------*
+PROCEDURE NOTFOUND
+
+IF NOT WEXIST("notfound") ;
+	OR UPPER(WTITLE("NOTFOUND")) == "NOTFOUND.PJX" ;
+	OR UPPER(WTITLE("NOTFOUND")) == "NOTFOUND.SCX" ;
+	OR UPPER(WTITLE("NOTFOUND")) == "NOTFOUND.MNX" ;
+	OR UPPER(WTITLE("NOTFOUND")) == "NOTFOUND.PRG" ;
+	OR UPPER(WTITLE("NOTFOUND")) == "NOTFOUND.FRX" ;
+	OR UPPER(WTITLE("NOTFOUND")) == "NOTFOUND.QPR"
+	DEFINE WINDOW notfound ;
+		AT  0.000, 0.000  ;
+		SIZE 11.250,59.125 ;
+		FONT "MS Sans Serif", 10 ;
+		STYLE "B" ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,0,255,0)
+	MOVE WINDOW notfound CENTER
+ENDIF
+
+IF WVISIBLE("notfound")
+	ACTIVATE WINDOW notfound SAME IN WINDOW &WINNAME
+ELSE
+	ACTIVATE WINDOW notfound NOSHOW IN WINDOW &WINNAME
+ENDIF
+
+@ 0.313,17.875 SAY "Invalid Specification" ;
+	FONT "MS Sans Serif", 14 ;
+	STYLE "BT" ;
+	COLOR RGB(0,0,255,,,,)
+		
+@ 2.750,12.625 SAY "Do You Want To Create It ? (Y/N)" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT" ;
+	COLOR RGB(128,0,0,,,,)
+@ 5.000,14.250 SAY "Specify Y For Yes Or N For No" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT" ;
+	COLOR RGB(128,0,0,,,,)
+
+@ 8.188,29.000 GET ANS ;
+	SIZE 1.000,1.000 ;
+	FONT "MS Sans Serif", 10 ;
+	STYLE "B" ;
+	PICTURE "Y"
+
+IF NOT WVISIBLE("notfound")
+	ACTIVATE WINDOW notfound IN WINDOW &WINNAME
+ENDIF
+
+READ
+
+RELEASE WINDOW notfound
+*------------------------------------------------------------------------------------------------------------*
+PROCEDURE ASKSAVE
+
+IF NOT WEXIST("ASKSAVE") ;
+	OR UPPER(WTITLE("ASKSAVE")) == "ASKSAVE.PJX" ;
+	OR UPPER(WTITLE("ASKSAVE")) == "ASKSAVE.SCX" ;
+	OR UPPER(WTITLE("ASKSAVE")) == "ASKSAVE.MNX" ;
+	OR UPPER(WTITLE("ASKSAVE")) == "ASKSAVE.PRG" ;
+	OR UPPER(WTITLE("ASKSAVE")) == "ASKSAVE.FRX" ;
+	OR UPPER(WTITLE("ASKSAVE")) == "ASKSAVE.QPR"
+	DEFINE WINDOW ASKSAVE ;
+		AT  25.000, 80.000  ;
+		SIZE 5.600,36.875 ;
+		TITLE "Confirmation" ;
+		FONT "MS Sans Serif", 12 ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,0,255,255)
+ENDIF
+
+IF WVISIBLE("ASKSAVE")
+	ACTIVATE WINDOW ASKSAVE SAME IN WINDOW &WINNAME
+ELSE
+	ACTIVATE WINDOW ASKSAVE NOSHOW IN WINDOW &WINNAME
+ENDIF
+
+IF NOT WVISIBLE("ASKSAVE")
+	ACTIVATE WINDOW ASKSAVE IN WINDOW &WINNAME
+ENDIF
+
+@ 0.650,2.625 SAY "Are You Sure To Save ? (Y/N)" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+DO WHILE .T. &&
+
+@ 2.800,17.750 GET ANS ;
+	SIZE 1.000,1.125 ;
+	FONT "MS Sans Serif", 12 ;
+	PICTURE "Y"
+
+READ
+
+IF ALLTRIM(UPPER(ANS))="Y" OR ALLTRIM(UPPER(ANS))="N"
+EXIT
+ENDIF
+
+ENDDO &&
+
+RELEASE WINDOW ASKSAVE
+
+*--------------------------------------------------------------------------------------------*
+PROCEDURE SHOWSTOCK
+SET CURSOR OFF
+
+IF NOT WEXIST("SHOWSTOCK")
+	DEFINE WINDOW SHOWSTOCK ;
+		AT  0.000, 0.000  ;
+		SIZE 20.438,60.625 ;
+		FONT "MS Sans Serif", 10 ;
+		STYLE "B" ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,255,242,249)
+	MOVE WINDOW SHOWSTOCK CENTER
+ENDIF
+
+IF WVISIBLE("SHOWSTOCK")
+	ACTIVATE WINDOW SHOWSTOCK SAME
+ELSE
+	ACTIVATE WINDOW SHOWSTOCK NOSHOW
+ENDIF
+
+IF NOT WVISIBLE("SHOWSTOCK")
+	ACTIVATE WINDOW SHOWSTOCK
+ENDIF
+
+@ 2.000,20.250 SAY "Parts Present Status" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+@ 5.750,2.750 SAY "Part No." ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+@ 5.750,20.750 SAY MCOMPCODE ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+@ 7.750,2.750 SAY "Particulars" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+@ 7.750,20.750 SAY  MITEM ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+@ 9.750,2.750 SAY "N.D.P." ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+@ 9.750,20.750 SAY  TRANSFORM(MRATE,"##,##,##,###.##") ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+@ 11.750,2.750 SAY "M.R.P." ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+@ 11.750,20.750 SAY  TRANSFORM(MMRP,"##,##,##,###.##") ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+@ 13.750,2.750 SAY "Stock In Hand" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+@ 13.750,20.750 SAY  TRANSFORM(MCLOSQTY,"##,##,##,###") ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+@ 15.750,2.750 SAY "Location" ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+@ 15.750,20.750 SAY MLOCATIONS ;
+	FONT "MS Sans Serif", 12 ;
+	STYLE "BT"
+
+READ CYCLE
+
+
+RELEASE WINDOW SHOWSTOCK
+
+SET CURSOR ON
+*--------------------------------------------------------------------------------------------*
+PROCEDURE NOMORE
+
+SET CURSOR OFF
+
+IF NOT WEXIST("nomore") ;
+	OR UPPER(WTITLE("NOMORE")) == "NOMORE.PJX" ;
+	OR UPPER(WTITLE("NOMORE")) == "NOMORE.SCX" ;
+	OR UPPER(WTITLE("NOMORE")) == "NOMORE.MNX" ;
+	OR UPPER(WTITLE("NOMORE")) == "NOMORE.PRG" ;
+	OR UPPER(WTITLE("NOMORE")) == "NOMORE.FRX" ;
+	OR UPPER(WTITLE("NOMORE")) == "NOMORE.QPR"
+	DEFINE WINDOW nomore ;
+		AT  0.000, 0.000  ;
+		SIZE 7.563,49.625 ;
+		FONT "MS Sans Serif", 10 ;
+		STYLE "B" ;
+		NOFLOAT ;
+		NOCLOSE ;
+		NOMINIMIZE ;
+		SYSTEM ;
+		COLOR RGB(,,,0,255,255)
+	MOVE WINDOW nomore CENTER
+ENDIF
+
+IF WVISIBLE("nomore")
+	ACTIVATE WINDOW nomore SAME IN WINDOW &WINNAME
+ELSE
+	ACTIVATE WINDOW nomore NOSHOW IN WINDOW &WINNAME
+ENDIF
+
+@ 2.813,9.625 SAY "No More Entries To Show" ;
+	FONT "MS Sans Serif", 14 ;
+	STYLE "BT" ;
+	COLOR RGB(128,0,0,,,,)
+@ 6.188,11.500 SAY "Press Any Key To Continue ....." ;
+	FONT "MS Sans Serif", 10 ;
+	STYLE "BT" ;
+	COLOR RGB(0,0,128,,,,)
+@ 2.125,0.000 TO 2.125,49.625 ;
+	PEN 1, 8 ;
+	STYLE "1"
+@ 0.688,18.750 SAY "W A R N I N G" ;
+	FONT "MS Sans Serif", 10 ;
+	STYLE "BT" ;
+	COLOR RGB(255,0,0,,,,)
+@ 5.125,0.000 TO 5.125,49.625 ;
+	PEN 1, 8 ;
+	STYLE "1"
+
+IF NOT WVISIBLE("nomore")
+	ACTIVATE WINDOW nomore IN WINDOW &WINNAME
+ENDIF
+
+READ CYCLE
+
+RELEASE WINDOW nomore
+
+SET CURSOR OFF
+*---------------------------------------------------------------------------*
+PROCEDURE GETCALC
+
+ON KEY
+*---------------------------------------------------------------------------*

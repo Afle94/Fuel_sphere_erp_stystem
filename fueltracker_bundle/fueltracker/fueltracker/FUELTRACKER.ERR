@@ -1,0 +1,91 @@
+Form d:\fueltracker\newmenu.scx has the following errors:
+    Form SHOWALLFIRMANDFY - Undefined
+
+Form d:\fueltracker\acinfo.scx has the following errors:
+    Form GETOLDACNO - Undefined
+    Form GETSALESMAN - Undefined
+    Form ASKSTATECODE - Undefined
+
+Form d:\fueltracker\chgacinfo.scx has the following errors:
+    Form GETOLDACNO - Undefined
+    Form GETSALESMAN - Undefined
+    Form ASKSTATECODE - Undefined
+
+Form d:\fueltracker\partycreate.scx has the following errors:
+    Form ASKSTATECODE - Undefined
+
+Form d:\fueltracker\ledger.scx has the following errors:
+    Report PRODLEDGER - Undefined
+    Report BILLWISELEDGER - Undefined
+    Report BILLLEDGERDR - Undefined
+
+Form d:\fueltracker\newostd.scx has the following errors:
+    Form ASKPW - Undefined
+    Form AGEING - Undefined
+
+Form d:\fueltracker\showledger.scx has the following errors:
+    Form CHGSALESLEDGER - Undefined
+
+Form d:\fueltracker\purchase2.scx has the following errors:
+    Form SHOWCHALLANS - Undefined
+    Report LSALES2 - Undefined
+    Form SHIPPINGADDRESS - Undefined
+
+Form d:\fueltracker\addpuritem.scx has the following errors:
+    Form ASKMETERDETAILS - Undefined
+
+Form d:\fueltracker\chgpuritem.scx has the following errors:
+    Form ASKMETERDETAILS - Undefined
+    Form GETCOMPCODE - Undefined
+
+Form d:\fueltracker\addpurcfrieght.scx has the following errors:
+    Form ASKMETERDETAILS - Undefined
+    Form GETCOMPCODE - Undefined
+
+Form d:\fueltracker\prodmast.scx has the following errors:
+    Form GETSUBCATE - Undefined
+
+Form d:\fueltracker\itemregister.scx has the following errors:
+    Report SPAREMSTREGISTER - Undefined
+
+Form d:\fueltracker\chgprodmast.scx has the following errors:
+    Form GETSUBCATE - Undefined
+
+Form d:\fueltracker\stockrep.scx has the following errors:
+    Report STOCKREP - Undefined
+
+Form d:\fueltracker\askoptions.scx has the following errors:
+    Form GETSUBCATE - Undefined
+
+Form d:\fueltracker\showbincard.scx has the following errors:
+    Report BINCARD - Undefined
+
+Form d:\fueltracker\crsalesregister.scx has the following errors:
+    Report CRSALESREGISTER - Undefined
+
+Form d:\fueltracker\cashreceiptsregister.scx has the following errors:
+    Report CASHRECEIPTSREGISTER - Undefined
+
+Form d:\fueltracker\chqreceiptsregister.scx has the following errors:
+    Report CHQRECEIPTSREGISTER - Undefined
+
+Form d:\fueltracker\cashpaymentsregister.scx has the following errors:
+    Report CASHPAYMENTSREGISTER - Undefined
+
+Form d:\fueltracker\chqpaymentsregister.scx has the following errors:
+    Report CHQPAYMENTSREGISTER - Undefined
+
+Form d:\fueltracker\purchaseregister.scx has the following errors:
+    Report PURCHASEREGISTER - Undefined
+
+Form d:\fueltracker\createparty.scx has the following errors:
+    Form GETOLDACNO - Undefined
+    Form ASKSTATECODE - Undefined
+
+Form d:\fueltracker\prodpareto.scx has the following errors:
+    Report P1PRINT - Undefined
+    Report ITEMSALE - Undefined
+    Form GETNEWACCATEGORY - Undefined
+    Report CITYWISE - Undefined
+    Report CITYWISESUMMARY - Undefined
+
